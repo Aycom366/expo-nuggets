@@ -38,14 +38,24 @@ export default function Page() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [commentValue, setCommentValue] = useState("");
+
+  /**
+   * Get the keyboard height that will be used across the app to  make the scrolling smooth
+   * It will be best to store this in async storage and get it when the app starts
+   */
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  /**
+   * This will be used to set the paddingBottom of the flatListContentContainer for IOS
+   */
+  const [keyboardPadding, setKeyboardPadding] = useState(0);
 
   /**
    * This will be used to get the height of the comment input container
    * This will be part of the ingredients to make the commentCard stay above the keyboard
    */
   const [commentInputContainerHeight, setCommentInputContainerHeight] =
-    useState(119);
+    useState(120);
 
   /**
    * This will be used to set focus on input when the reply button is clicked so the keyboard can show up
@@ -117,6 +127,7 @@ export default function Page() {
 
     function onKeyboardDidShow(e: KeyboardEvent) {
       const keyboardHeight = e.endCoordinates.height;
+      setKeyboardPadding(keyboardHeight);
       setKeyboardHeight(keyboardHeight);
     }
 
@@ -139,7 +150,7 @@ export default function Page() {
        * set back the keyboardHeight to 0 when the keyboard is hidden
        * To remove unnecessary space below the last input element
        */
-      setKeyboardHeight(0);
+      setKeyboardPadding(0);
     });
 
     return () => {
@@ -169,10 +180,12 @@ export default function Page() {
              * This is only applicable to IOS
              */
             contentContainerStyle={{
-              paddingBottom: Platform.OS === "ios" ? keyboardHeight : undefined,
+              //NB: This doesn't work
+              paddingBottom:
+                Platform.OS === "ios" ? keyboardPadding : undefined,
             }}
             showsVerticalScrollIndicator={false}
-            contentContainerClassName='gap-4 '
+            contentContainerClassName='gap-4'
             ref={flatListRef}
             data={Comments}
             keyExtractor={(item) => item.id.toString()}
