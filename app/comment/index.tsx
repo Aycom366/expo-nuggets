@@ -10,6 +10,8 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
+  KeyboardEvent,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@/components/shared/Button";
@@ -26,16 +28,27 @@ export interface IComment {
 export interface ISelectedComment {
   email: string;
   id: number | undefined;
+  top: number;
+  height: number;
 }
 
 export default function Page() {
+  const { height } = useWindowDimensions();
   const [Comments, setComments] = useState<IComment[]>([] as IComment[]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [commentValue, setCommentValue] = useState("");
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   /**
-   * This will be used to focus the input when the reply button is clicked so the keyboard can show up
+   * This will be used to get the height of the comment input container
+   * This will be part of the ingredients to make the commentCard stay above the keyboard
+   */
+  const [commentInputContainerHeight, setCommentInputContainerHeight] =
+    useState(119);
+
+  /**
+   * This will be used to set focus on input when the reply button is clicked so the keyboard can show up
    */
   const inputRef = useRef<TextInput>(null);
 
@@ -47,6 +60,8 @@ export default function Page() {
   const [selectedComment, setSelectedComment] = useState<ISelectedComment>({
     email: "",
     id: undefined,
+    top: 0,
+    height: 0,
   });
 
   /**
@@ -55,6 +70,29 @@ export default function Page() {
    * This will be used to scroll to a specific item
    */
   const flatListRef = useRef<FlatList<IComment>>(null);
+
+  /**
+   * Scrolls the FlatList to position the selected comment just above the keyboard.
+   *
+   * This effect runs whenever the `selectedComment.id` or `keyboardHeight` changes.
+   *
+   * If `selectedComment.id` is not set, the effect returns early and does nothing.
+   *
+   * Otherwise, it calculates an offset based on the top position of the selected comment,
+   * the window height, the keyboard height, and the height of the selected comment.
+   *
+   * It then calls `scrollToOffset` on the `flatListRef` to scroll the FlatList to this offset.
+   * An additional commentInputContainerHeight pixels are added to the offset to account for the replying container
+   */
+  useEffect(() => {
+    if (!selectedComment.id) return;
+    const offset =
+      selectedComment.top - (height - keyboardHeight - selectedComment.height);
+    flatListRef.current?.scrollToOffset({
+      offset: offset + commentInputContainerHeight,
+      animated: true,
+    });
+  }, [selectedComment.id, keyboardHeight, commentInputContainerHeight]);
 
   /**
    * Fetch comments from the API
@@ -77,8 +115,9 @@ export default function Page() {
     }
     getComments();
 
-    function onKeyboardDidShow(e: any) {
-      //do something
+    function onKeyboardDidShow(e: KeyboardEvent) {
+      const keyboardHeight = e.endCoordinates.height;
+      setKeyboardHeight(keyboardHeight);
     }
 
     /**
@@ -95,6 +134,12 @@ export default function Page() {
        * This is to make sure the input is not focused when the keyboard is hidden
        */
       inputRef.current?.blur();
+
+      /**
+       * set back the keyboardHeight to 0 when the keyboard is hidden
+       * To remove unnecessary space below the last input element
+       */
+      setKeyboardHeight(0);
     });
 
     return () => {
@@ -107,7 +152,7 @@ export default function Page() {
   if (error) return <Text>{error}</Text>;
 
   function clearReplyTo() {
-    setSelectedComment({ email: "", id: undefined });
+    setSelectedComment({ email: "", id: undefined, top: 0, height: 0 });
   }
 
   return (
@@ -116,20 +161,39 @@ export default function Page() {
         className='h-full'
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View className=' px-4 flex-1'>
+        <View className=' flex-1 px-4'>
           <FlatList
+            /**
+             * For some strange reason, the last 2 to 3 items doesn't show up above the keyboard and this is because there is no enough space to scroll the last item to the top of the keyboard
+             * To fix this, we need to add some padding to the bottom of the FlatList to make sure the last item is visible when the keyboard is shown
+             * This is only applicable to IOS
+             */
+            contentContainerStyle={{
+              paddingBottom: Platform.OS === "ios" ? keyboardHeight : undefined,
+            }}
             showsVerticalScrollIndicator={false}
             contentContainerClassName='gap-4 '
             ref={flatListRef}
             data={Comments}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <CommentCard {...item} setSelectedComment={setSelectedComment} />
+              <CommentCard
+                flatListRef={flatListRef}
+                inputRef={inputRef}
+                {...item}
+                setSelectedComment={setSelectedComment}
+              />
             )}
           />
-          <View className='py-4 flex flex-col'>
+          <View
+            onLayout={(event) => {
+              const { height } = event.nativeEvent.layout;
+              setCommentInputContainerHeight(height);
+            }}
+            className='flex flex-col py-4'
+          >
             {selectedComment.email && (
-              <View className='flex-row py-4 bg-slate-200 px-2 rounded-md w-full justify-between items-center'>
+              <View className='w-full flex-row items-center justify-between rounded-md bg-slate-200 px-2 py-4'>
                 <Text ellipsizeMode='tail' numberOfLines={1}>
                   Replying to {selectedComment.email}
                 </Text>
@@ -141,14 +205,14 @@ export default function Page() {
                 />
               </View>
             )}
-            <View className='flex-row gap-1 rounded-md items-center border px-4 '>
+            <View className='flex-row items-center gap-1 rounded-md border px-4 '>
               <TextInput
                 ref={inputRef}
                 value={commentValue}
                 onChangeText={setCommentValue}
                 placeholder='Write a comment...'
                 multiline
-                className='flex-1  h-[40px]'
+                className='h-[40px]  flex-1'
               />
               <TouchableOpacity>
                 <Text className='font-medium'>Post</Text>

@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import { FlatList, TouchableOpacity, Text } from "react-native";
+import { Link } from "expo-router";
+import { FlatList, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const links = [
@@ -14,7 +14,6 @@ const links = [
 ] as const;
 
 export default function Page() {
-  const router = useRouter();
   return (
     <SafeAreaView>
       <Text className='text-3xl text-center mt-4'>Nuggets</Text>
@@ -25,12 +24,12 @@ export default function Page() {
         data={links}
         keyExtractor={(item) => item.link}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            className='border h-24 px-4 text-center items-center justify-center rounded-lg mx-2 flex-1 bg-slate-300 '
-            onPress={() => router.push(item.link as any)}
+          <Link
+            href={item.link as never}
+            className='border py-16 px-4 text-center items-center justify-center rounded-lg mx-2 flex-1 bg-slate-300 '
           >
             <Text className='text-center'>{item.name}</Text>
-          </TouchableOpacity>
+          </Link>
         )}
       />
     </SafeAreaView>
