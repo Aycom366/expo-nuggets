@@ -172,7 +172,7 @@ export default function Page() {
         className='h-full'
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View className=' flex-1 px-4'>
+        <View className='flex-1 px-4'>
           <FlatList
             /**
              * For some strange reason, the last 2 to 3 items doesn't show up above the keyboard and this is because there is no enough space to scroll the last item to the top of the keyboard
