@@ -1,4 +1,4 @@
-import { Link, Redirect } from "expo-router";
+import { Link } from "expo-router";
 import { FlatList, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,15 +11,9 @@ const links = [
     name: "Whatsapp Audio Recording",
     link: "/audio",
   },
-  {
-    name: "Camera Swap Scroll",
-    link: "/camera-swap-scroll",
-  },
 ] as const;
 
 export default function Page() {
-  return <Redirect href='/camera-swap-scroll/' />;
-
   return (
     <SafeAreaView>
       <Text className='text-3xl text-center mt-4'>Nuggets</Text>
