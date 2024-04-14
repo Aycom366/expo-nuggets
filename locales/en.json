@@ -1,0 +1,5 @@
+{
+  "greeting": "Hello World",
+  "objective": "This is a simple example of how to use i18next with Expo",
+  "changeLanguage": "Swap Language"
+}
