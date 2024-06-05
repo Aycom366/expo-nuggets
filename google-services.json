@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "730238166499",
+    "project_id": "expo-nuggets",
+    "storage_bucket": "expo-nuggets.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730238166499:android:fd3756c6e8a6bf74446cd6",
+        "android_client_info": {
+          "package_name": "com.aycom366.exponuggets"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRMM7u6v8tOl95C7NnrSEf2gijBKMSNU0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
