@@ -18,7 +18,8 @@
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Give $(PRODUCT_NAME) permission to use your microphone. Your record won't be shared without your permission."
       },
-      "bundleIdentifier": "com.aycom366.exponuggets"
+      "bundleIdentifier": "com.aycom366.exponuggets",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "permissions": [
@@ -29,7 +30,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.aycom366.exponuggets"
+      "package": "com.aycom366.exponuggets",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -38,12 +40,12 @@
     },
     "plugins": [
       "expo-router",
+      "@react-native-google-signin/google-signin",
       [
-        "expo-camera",
+        "@config-plugins/react-native-webrtc",
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "recordAudioAndroid": true
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone"
         }
       ]
     ],
