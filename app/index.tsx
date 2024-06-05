@@ -11,10 +11,13 @@ const links = [
     name: "Whatsapp Audio Recording",
     link: "/audio",
   },
+<<<<<<< HEAD
   {
     name: "Web RTC",
     link: "/(call)/setup",
   },
+=======
+>>>>>>> main
 ] as const;
 
 export default function Page() {

@@ -3,7 +3,6 @@ const { withNativeWind } = require("nativewind/metro");
 const resolveFrom = require("resolve-from");
 
 const config = getDefaultConfig(__dirname);
-config.resolver.sourceExts.push("cjs");
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
   if (
