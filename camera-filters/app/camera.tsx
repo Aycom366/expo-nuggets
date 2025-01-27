@@ -65,6 +65,7 @@ export default function CameraPage() {
         flash: flash,
         enableShutterSound: true,
       });
+
       router.push({
         pathname: "/media",
         params: {
@@ -78,7 +79,7 @@ export default function CameraPage() {
     } catch (e) {
       console.error("Failed to take photo!", e);
     }
-  }, [camera, flash]);
+  }, [camera, flash, filterIndex]);
 
   return (
     <View style={styles.container}>
@@ -93,10 +94,7 @@ export default function CameraPage() {
           videoHdr={videoHdr}
           photoQualityBalance="balanced"
           lowLightBoost={device.supportsLowLightBoost && enableNightMode}
-          enableZoomGesture={false}
           exposure={0}
-          enableFpsGraph={true}
-          pixelFormat="yuv"
           outputOrientation="device"
           photo={true}
           video={false}
@@ -117,7 +115,7 @@ export default function CameraPage() {
           bottom: SAFE_AREA_PADDING.paddingBottom,
         }}
       >
-        {showingFilters && <Filters currentIndex={filterIndex} setCurrentIndex={setFilterIndex} />}
+        {showingFilters && <Filters filterIndex={filterIndex} setFilterIndex={setFilterIndex} />}
         <TouchableOpacity
           onPress={takePhoto}
           style={{

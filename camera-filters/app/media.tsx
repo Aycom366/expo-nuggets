@@ -58,10 +58,10 @@ export default function Page() {
           {/* To know more about this, pleas visit https://shopify.github.io/react-native-skia/docs/color-filters */}
           <ColorMatrix matrix={colorMatrix[filterIndex].matrix} />
         </Image>
-      </Canvas>{" "}
-      have
+      </Canvas>
+
       <View style={{ gap: 15 }}>
-        <Filters currentIndex={filterIndex} setCurrentIndex={setFilterIndex} />
+        <Filters filterIndex={filterIndex} setFilterIndex={setFilterIndex} />
         <TouchableOpacity disabled={savingImage} onPress={handleSave} style={{ alignSelf: "center", backgroundColor: "green", padding: 10, borderRadius: 10 }}>
           <ThemedText> {savingImage ? "Saving..." : "Save Image"}</ThemedText>
         </TouchableOpacity>
