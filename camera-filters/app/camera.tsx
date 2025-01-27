@@ -29,7 +29,7 @@ export default function CameraPage() {
 
   const SAFE_AREA_PADDING = getSafeAreaPadding();
 
-  const format = useCameraFormat(device, [{ videoResolution: Dimensions.get("window") }]);
+  const format = useCameraFormat(device, [{ videoResolution: "max" }]);
 
   const supportsFlash = device?.hasFlash ?? false;
   const supportsHdr = format?.supportsPhotoHdr;
