@@ -1,0 +1,28 @@
+diff --git a/src/skia/useSkiaFrameProcessor.ts b/src/skia/useSkiaFrameProcessor.ts
+index 62e27d3d7e357d5d7c74a1c520526f7f89c95478..634b6ee7ec3489725a67edf0b2be38b27069acf0 100644
+--- a/src/skia/useSkiaFrameProcessor.ts
++++ b/src/skia/useSkiaFrameProcessor.ts
+@@ -89,18 +89,18 @@ function withRotatedFrame(frame: Frame, canvas: SkCanvas, previewOrientation: Or
+   try {
+     // 2. properly rotate canvas so Frame is rendered up-right.
+     const orientation = relativeTo(frame.orientation, previewOrientation)
+-    switch (orientation) {
++     switch (orientation) {
+       case 'portrait':
+-        // do nothing
++          canvas.translate( 0,frame.height / 2)
+         break
+       case 'landscape-left':
+-        // rotate two flips on (0,0) origin and move X + Y into view again
+-        canvas.translate(frame.height, frame.width)
++        canvas.scale(-1, 1); // Flip the canvas horizontally
++        canvas.translate(-frame.height, frame.width); // Adjust the canvas position after flipping
+         canvas.rotate(270, 0, 0)
+         break
+       case 'portrait-upside-down':
+         // rotate three flips on (0,0) origin and move Y into view again
+-        canvas.translate(frame.width, frame.height)
++        canvas.translate(frame.width, frame.height * 1.5)
+         canvas.rotate(180, 0, 0)
+         break
+       case 'landscape-right':
