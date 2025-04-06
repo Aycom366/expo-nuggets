@@ -16,23 +16,19 @@ export default {
     ios: {
       supportsTablet: true,
       infoPlist: {
-        NSMicrophoneUsageDescription:
-          "Give $(PRODUCT_NAME) permission to use your microphone. Your record won't be shared without your permission.",
+        NSMicrophoneUsageDescription: "Give $(PRODUCT_NAME) permission to use your microphone. Your record won't be shared without your permission.",
       },
       bundleIdentifier: "com.aycom366.exponuggets",
-      googleServicesFile: process.env.GOOGLE_SERVICES_JSON_INFO,
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON_INFO_NEW ? process.env.GOOGLE_SERVICES_JSON_INFO_NEW : "./GoogleService-Info.plist",
     },
     android: {
-      permissions: [
-        "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS",
-      ],
+      permissions: ["android.permission.RECORD_AUDIO", "android.permission.MODIFY_AUDIO_SETTINGS"],
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
       package: "com.aycom366.exponuggets",
-      googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON_NEW ? process.env.GOOGLE_SERVICES_JSON_NEW : "./google-services.json",
     },
     web: {
       bundler: "metro",
@@ -46,8 +42,7 @@ export default {
         "@config-plugins/react-native-webrtc",
         {
           cameraPermission: "Allow $(PRODUCT_NAME) to access your camera",
-          microphonePermission:
-            "Allow $(PRODUCT_NAME) to access your microphone",
+          microphonePermission: "Allow $(PRODUCT_NAME) to access your microphone",
         },
       ],
     ],

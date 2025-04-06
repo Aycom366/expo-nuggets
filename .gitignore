@@ -11,6 +11,7 @@ android/
 ios/
 google-services.json
 GoogleService-Info.plist
+Expo_Firebase_Admin.json
 
 # Native
 *.orig.*
