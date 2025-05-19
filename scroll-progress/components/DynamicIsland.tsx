@@ -93,7 +93,7 @@ export function DynamicIsland({
     expandAnimation.value = withTiming(isExpanded ? 1 : 0);
     opacityAnimation.value = withTiming(isExpanded ? 0 : 1);
     islandWidth.value = withTiming(isExpanded ? 0.9 * width : 0.8 * width);
-  }, [isExpanded, expandAnimation, opacityAnimation, islandWidth]);
+  }, [isExpanded]);
 
   const animatedStyle = useAnimatedStyle(() => {
     const height = interpolate(
